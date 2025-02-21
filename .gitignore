@@ -12,7 +12,7 @@ notebooks/venv
 notebooks/spark-defaults.conf
 notebooks/.ipynb_checkpoints
 mysql/
-
+.DS_Store
 
 # dagster
 dagster_home/logs/
