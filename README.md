@@ -61,16 +61,7 @@ The project consists of multiple services managed using Docker Compose:
 
 ## Running the Project
 
-To start all services, run:
-```bash
-docker-compose up -d
-
-# To stop all services:
-
-```bash
-docker-compose down
-
-# Accessing the Services
+### Accessing the Services
 
 - **MySQL:** `localhost:3306`
 - **MinIO Console:** `http://localhost:9001`
@@ -78,7 +69,7 @@ docker-compose down
 - **Dagster UI (Dagit):** `http://localhost:3001`
 - **Jupyter Notebook (Spark):** `http://localhost:8888`
 
-## Environment Variables
+### Environment Variables
 
 The `.env` file should contain the required credentials:
 
@@ -92,6 +83,9 @@ POSTGRES_PASSWORD=admin123
 POSTGRES_DB=testing
 AWS_ACCESS_KEY_ID=minio
 AWS_SECRET_ACCESS_KEY=minio123
+```plaintext
+
+
 
 
 ## Notes
