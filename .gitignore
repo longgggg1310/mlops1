@@ -8,9 +8,10 @@ storage/
 dataset/
 minio/
 postgresql/
-notebooks/
+notebooks/venv
+notebooks/spark-defaults.conf
+notebooks/.ipynb_checkpoints
 mysql/
-.coverage
 
 
 # dagster
