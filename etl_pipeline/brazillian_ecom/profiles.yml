@@ -1,0 +1,12 @@
+brazillian_ecom:
+  outputs:
+    dev:
+      dbname: testing
+      host: localhost
+      pass: admin123
+      port: 5432
+      schema: brazilian_ecom
+      threads: 1
+      type: postgres
+      user: admin
+  target: dev

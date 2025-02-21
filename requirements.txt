@@ -1,0 +1,6 @@
+dagit==1.2.3
+dagster==1.2.3
+dagster-postgres==0.18.3
+dagster-dbt==0.18.3
+pymysql
+sqlalchemy

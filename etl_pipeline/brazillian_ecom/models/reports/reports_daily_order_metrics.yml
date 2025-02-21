@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: reports_daily_order_metrics
+    columns:
+      - name: order_purchase_date
+        description: Date of order purchase
+        tests:
+          - unique
+          - not_null
+      - name: orders_count
+        description: Total number of orders
+        tests:
+          - not_null
+      - name: customers_making_orders_count
+        description: Total number of customers making orders (with two decimal places)
+        tests:
+          - not_null
+      - name: revenue_usd
+        description: Total revenue in USD
+        tests:
+          - not_null
+      - name: average_revenue_per_order_usd
+        description: Average revenue per order in USD (with two decimal places)
+        tests:
+          - not_null
+      - name: top_3_product_categories_by_revenue
+        description: Top 3 product categories by revenue (comma-separated list, descending order)
+        tests:
+          - not_null
+      - name: top_3_product_categories_revenue_percentage
+        description: Revenue percentage for top 3 product categories (comma-separated list with two decimal places, descending order)
+        tests:
+          - not_null

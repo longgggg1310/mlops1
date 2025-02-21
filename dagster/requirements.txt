@@ -1,0 +1,6 @@
+dagster==1.1.20
+dagit==1.1.20
+dagster-postgres==0.17.20
+pendulum==2.1.2
+pydantic==1.10.7
+pyspark==3.3.2

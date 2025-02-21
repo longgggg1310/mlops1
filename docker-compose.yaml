@@ -1,0 +1,146 @@
+version : "3.0"
+services:
+
+  mysql:
+    image: "mysql:8.0"
+    container_name: mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./dataset:/tmp/dataset
+      - ./load_dataset:/tmp/load_dataset
+    ports:
+      - "3306:3306"
+    networks:
+      - de_network
+
+    env_file:
+      - .env
+
+  minio:
+    image: "minio/minio"
+    container_name: minio
+    hostname: minio
+    command: [ "server", "/data", "--console-address", ":9001" ]
+    env_file:
+      - .env
+    networks:
+      - de_network
+    ports:
+      - "9001:9001"
+      - "9000:9000"
+    volumes:
+      - ./minio:/data
+    #postgresql
+  
+  mc:
+    image: minio/mc
+    hostname: mc
+    container_name: mc
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123 
+      - AWS_REGION=us-east-1
+    entrypoint: >
+      /bin/sh -c " until (/usr/bin/mc config host add minio
+      http://minio:9000 minio minio123) do echo '...waiting...' && sleep 1;
+      done; /usr/bin/mc mb minio/lakehouse; /usr/bin/mc policy set public
+      minio/lakehouse; exit 0; "
+    depends_on:
+      - minio
+    networks:
+      - de_network
+  etl_pipeline:
+    build:
+      context: ./etl_pipeline
+      dockerfile: ./Dockerfile
+    container_name: etl_pipeline
+    image: etl_pipeline:latest
+    volumes:
+      - ./etl_pipeline:/opt/dagster/app
+    env_file:
+      - .env
+ 
+    networks:
+      - de_network
+  de_psql:
+      image: "postgres:15"
+      container_name: de_psql
+      volumes:
+        - ./postgresql:/var/lib/postgresql/data
+        - ./load_dataset:/tmp/load_dataset
+      ports:
+        - "5432:5432"
+      env_file:
+        - .env
+      networks:
+      - de_network
+
+
+  de_dagster:
+    build:
+      context: ./dagster/
+    container_name: de_dagster
+    image: de_dagster
+    networks:
+      - de_network
+
+  de_dagster_dagit:
+    image: de_dagster:latest
+    entrypoint:
+      - dagit
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3001"
+      - -w
+      - workspace.yaml
+    container_name: de_dagster_dagit
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+    volumes: # Make docker client accessible so we can terminate
+       - /var/run/docker.sock:/var/run/docker.sock
+       - ./dagster_home:/opt/dagster/dagster_home
+    env_file:
+      - .env
+    networks:
+      - de_network
+
+
+  de_dagster_daemon:
+    image: de_dagster:latest
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: de_dagster_daemon
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./dagster_home:/opt/dagster/dagster_home
+    env_file:
+      - .env
+    networks:
+      - de_network
+
+
+  spark-notebook:
+    build:
+      context: ./notebooks
+      dockerfile: ./Dockerfile
+    container_name: "spark-notebook"
+    user: root
+    environment:
+      - JUPYTER_ENABLE_LAB="yes"
+      - GRANT_SUDO="yes"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./notebooks/spark-defaults.conf:/usr/local/spark/conf/spark-defaults.conf
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    networks:
+      - de_network
+networks:
+  de_network:
+    driver: bridge
+    name: de_network

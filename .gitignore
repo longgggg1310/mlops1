@@ -1,0 +1,21 @@
+venv/
+Pipfile.lock
+
+# Cache
+.cache*
+__pycache__/
+storage/
+dataset/
+minio/
+postgresql/
+notebooks/
+mysql/
+.coverage
+
+
+# dagster
+dagster_home/logs/
+dagster_home/.logs_queue/
+dagster_home/.telemetry/
+dagster_home/history/
+dagster_home/schedules/*
