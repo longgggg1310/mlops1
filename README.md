@@ -69,6 +69,21 @@ The project consists of multiple services managed using Docker Compose:
 - **Dagster UI (Dagit):** `http://localhost:3001`
 - **Jupyter Notebook (Spark):** `http://localhost:8888`
 
+
+
+## Notes
+
+- Ensure Docker and Docker Compose are installed before running the project.
+- The MinIO bucket is created automatically by the `mc` service.
+- Adjust paths and environment variables as needed.
+
+## Future Enhancements
+
+- Add monitoring with Prometheus + Grafana.
+- Automate dbt transformations in Dagster.
+- Implement Kafka for real-time processing.
+
+
 ### Environment Variables
 
 The `.env` file should contain the required credentials:
@@ -83,21 +98,5 @@ POSTGRES_PASSWORD=admin123
 POSTGRES_DB=testing
 AWS_ACCESS_KEY_ID=minio
 AWS_SECRET_ACCESS_KEY=minio123
-```plaintext
-
-
-
-
-## Notes
-
-- Ensure Docker and Docker Compose are installed before running the project.
-- The MinIO bucket is created automatically by the `mc` service.
-- Adjust paths and environment variables as needed.
-
-## Future Enhancements
-
-- Add monitoring with Prometheus + Grafana.
-- Automate dbt transformations in Dagster.
-- Implement Kafka for real-time processing.
 
 This setup provides a scalable and efficient data pipeline for e-commerce analytics using modern data engineering tools. 🚀
